@@ -278,8 +278,7 @@ export function EditWindow() {
         const newMod = def.create() as AnyModifier;
         setModifiers(prev => [...prev, newMod]);
         // Automatically open edit dialog for the new modifier
-        // Use timeout so Radix DropdownMenu doesn't intercept the click-outside and immediately dismiss the dialog
-        setTimeout(() => setEditingModifierId(newMod.id), 50);
+        setEditingModifierId(newMod.id);
     }, []);
 
     const handleUpdateModifier = useCallback(

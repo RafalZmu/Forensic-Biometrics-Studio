@@ -46,7 +46,10 @@ export function AddModifierButton({ onAdd, disabled }: AddModifierButtonProps) {
                     <DropdownMenuItem
                         key={def.type}
                         id={`add-modifier-${def.type}`}
-                        onSelect={() => onAdd(def.type)}
+                        onSelect={e => {
+                            e.preventDefault();
+                            onAdd(def.type);
+                        }}
                         className="flex items-center gap-2 cursor-pointer"
                     >
                         <ModifierIcon type={def.type} size={14} />

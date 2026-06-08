@@ -399,7 +399,7 @@ function FftSettings({
         if (!maskCvs) return;
         const ctx = maskCvs.getContext("2d");
         ctx?.clearRect(0, 0, maskCvs.width, maskCvs.height);
-        onChange({ _maskCanvas: maskCvs, maskDataUrl: null });
+        onChange({ _maskCanvas: maskCvs });
         if (viewMode === "edit") redrawOverlay();
     }, [viewMode, redrawOverlay, onChange]);
 
@@ -422,8 +422,10 @@ function FftSettings({
                 {status === "idle" && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
                         <p className="text-xs text-muted-foreground text-center px-4">
-                            Click &quot;Compute&quot; to analyse the frequency
-                            spectrum
+                            {t(
+                                'Click "Compute" to analyse the frequency spectrum',
+                                { ns: "tooltip" }
+                            )}
                         </p>
                         <Button
                             size="sm"
@@ -431,7 +433,7 @@ function FftSettings({
                             id="fft-compute-button"
                         >
                             <Play size={ICON.SIZE} className="mr-1.5" />
-                            Compute
+                            {t("Compute", { ns: "keywords" })}
                         </Button>
                     </div>
                 )}

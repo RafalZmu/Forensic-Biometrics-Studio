@@ -81,6 +81,7 @@ const d: Dictionary = {
         "Wybierz tryb pracy, aby wyświetlić typy adnotacji",
     Modifiers: "Modyfikatory",
     "No modifiers yet": "Brak modyfikatorów",
+    Compute: "Oblicz",
 };
 
 export default d;

@@ -45,7 +45,6 @@ export function createFftModifier(): FftModifier {
         params: {
             brushSize: 30,
             spectrumOpacity: 75,
-            maskDataUrl: null,
             _maskCanvas: null,
             _fftResult: null,
             _processor: null,
@@ -99,11 +98,4 @@ export function buildCssFilter(modifiers: AnyModifier[]): string {
         }
     });
     return parts.length > 0 ? parts.join(" ") : "none";
-}
-
-/**
- * Returns true if ANY enabled modifier in the list requires canvas processing.
- */
-export function hasCanvasModifiers(modifiers: AnyModifier[]): boolean {
-    return modifiers.some(m => m.enabled && m.type === "fft");
 }

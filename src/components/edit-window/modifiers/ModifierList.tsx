@@ -49,6 +49,8 @@ interface ModifierItemProps {
     onRemove: () => void;
     /** Called from the grip handle only */
     onGripMouseDown: (e: React.MouseEvent) => void;
+    /** Called when the user presses ArrowUp / ArrowDown on the grip handle */
+    onGripKeyDown: (e: React.KeyboardEvent) => void;
 }
 
 function ModifierItem({
@@ -58,6 +60,7 @@ function ModifierItem({
     onToggle,
     onRemove,
     onGripMouseDown,
+    onGripKeyDown,
 }: ModifierItemProps) {
     const { t } = useTranslation(["tooltip", "keywords"]);
 
@@ -77,19 +80,22 @@ function ModifierItem({
                 !modifier.enabled && "opacity-60"
             )}
         >
-            {/* Drag handle — only this element initiates DnD */}
-            <div
-                role="button"
-                tabIndex={-1}
-                aria-label="Drag to reorder"
-                className="shrink-0 text-muted-foreground/50 cursor-grab active:cursor-grabbing select-none touch-none"
+            {/* Drag handle — mouse DnD and keyboard (↑ / ↓) reordering */}
+            <button
+                type="button"
+                tabIndex={0}
+                data-modifier-grip
+                aria-label={t("Drag to reorder", { ns: "tooltip" })}
+                title={`${t("Move up", { ns: "tooltip" })} / ${t("Move down", { ns: "tooltip" })}`}
+                className="shrink-0 text-muted-foreground/50 cursor-grab active:cursor-grabbing select-none touch-none rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 onMouseDown={onGripMouseDown}
+                onKeyDown={onGripKeyDown}
             >
                 <GripVertical
                     size={ICON.SIZE}
                     strokeWidth={ICON.STROKE_WIDTH}
                 />
-            </div>
+            </button>
 
             <ModifierIcon type={modifier.type} />
 
@@ -108,7 +114,11 @@ function ModifierItem({
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6"
-                    title={modifier.enabled ? "Disable" : "Enable"}
+                    title={
+                        modifier.enabled
+                            ? t("Disable", { ns: "tooltip" })
+                            : t("Enable", { ns: "tooltip" })
+                    }
                     onClick={onToggle}
                     id={`modifier-toggle-${modifier.id}`}
                 >
@@ -122,7 +132,7 @@ function ModifierItem({
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6"
-                    title="Edit settings"
+                    title={t("Edit settings", { ns: "tooltip" })}
                     onClick={onEdit}
                     id={`modifier-edit-${modifier.id}`}
                 >
@@ -165,6 +175,24 @@ export function ModifierList({
     onRemove,
     onReorder,
 }: ModifierListProps) {
+    const handleKeyboardReorder = useCallback(
+        (e: React.KeyboardEvent, idx: number) => {
+            if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+            e.preventDefault();
+            const to = e.key === "ArrowUp" ? idx - 1 : idx + 1;
+            if (to < 0 || to >= modifiers.length) return;
+            onReorder(idx, to);
+            // Keep focus on the handle after the list re-renders
+            requestAnimationFrame(() => {
+                const handles = document.querySelectorAll<HTMLElement>(
+                    "[data-modifier-grip]"
+                );
+                handles[to]?.focus();
+            });
+        },
+        [modifiers.length, onReorder]
+    );
+    const { t } = useTranslation(["tooltip", "keywords"]);
     // dragging: which item + where it started
     const [dragging, setDragging] = useState<{
         id: string;
@@ -243,7 +271,7 @@ export function ModifierList({
     if (modifiers.length === 0) {
         return (
             <p className="text-xs text-muted-foreground/60 text-center py-3">
-                No modifiers yet
+                {t("No modifiers yet", { ns: "keywords" })}
             </p>
         );
     }
@@ -287,6 +315,7 @@ export function ModifierList({
                             onToggle={() => onToggle(mod.id)}
                             onRemove={() => onRemove(mod.id)}
                             onGripMouseDown={ev => startDrag(ev, mod.id, idx)}
+                            onGripKeyDown={ev => handleKeyboardReorder(ev, idx)}
                         />
                     </div>
                 );

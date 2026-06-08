@@ -95,5 +95,3 @@ export async function applyPipelineToImage(
     const buf = await blob.arrayBuffer();
     return new Uint8Array(buf);
 }
-
-// (applyFftModifier moved up)

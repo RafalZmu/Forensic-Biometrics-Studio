@@ -88,6 +88,7 @@ export type i18nKeywords = Recordify<
     | "No marking types found for the selected working mode"
     | "Modifiers"
     | "No modifiers yet"
+    | "Compute"
 >;
 
 export type i18nDescription = Recordify<
@@ -203,6 +204,13 @@ export type i18nTooltip = Recordify<
     | "brightness_desc"
     | "contrast_desc"
     | "fft_desc"
+    | "Disable"
+    | "Enable"
+    | "Edit settings"
+    | 'Click "Compute" to analyse the frequency spectrum'
+    | "Drag to reorder"
+    | "Move up"
+    | "Move down"
 >;
 
 export type i18nDialog = Recordify<

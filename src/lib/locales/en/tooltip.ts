@@ -63,6 +63,14 @@ const d: Dictionary = {
         "Adjust the difference between light and dark areas of the image",
     fft_desc:
         "Apply Fast Fourier Transform to filter out periodic noise and patterns",
+    Disable: "Disable",
+    Enable: "Enable",
+    "Edit settings": "Edit settings",
+    'Click "Compute" to analyse the frequency spectrum':
+        'Click "Compute" to analyse the frequency spectrum',
+    "Drag to reorder": "Drag to reorder",
+    "Move up": "Move up",
+    "Move down": "Move down",
 };
 
 export default d;
